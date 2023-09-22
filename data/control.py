@@ -37,10 +37,8 @@ while running:
                 paused = not paused
             elif event.key == pg.K_r:
                 cell_control.clear_cells()
-        if pg.mouse.get_pressed()[0]:
-            pos = pg.mouse.get_pos()
-            if pos[0]//cell.TILE_SIZE <= cell_control.WIDTH-2 and pos[1]//cell.TILE_SIZE <= cell_control.HEIGHT-2:
-                cell_control.create_cell(pos, 0)
+        if pg.mouse.get_pressed()[0] and pg.mouse.get_pos()[0]//cell.TILE_SIZE <= cell_control.WIDTH-2 and pg.mouse.get_pos()[1]//cell.TILE_SIZE <= cell_control.HEIGHT-2:
+            cell_control.create_cell(pg.mouse.get_pos(), 0)
         elif pg.mouse.get_pressed()[2]:
             pos = pg.mouse.get_pos()
             cell_control.delete_cell(pos)
@@ -59,13 +57,10 @@ while running:
                     paused = not paused
                 elif event.key == pg.K_r:
                     cell_control.clear_cells()
-            if pg.mouse.get_pressed()[0]:
-                pos = pg.mouse.get_pos()
-                if pos[0]//cell.TILE_SIZE <= cell_control.WIDTH-2 and pos[1]//cell.TILE_SIZE <= cell_control.HEIGHT-2:
-                    cell_control.create_cell(pos, 0)
+            if pg.mouse.get_pressed()[0] and pg.mouse.get_pos()[0]//cell.TILE_SIZE <= cell_control.WIDTH-2 and pg.mouse.get_pos()[1]//cell.TILE_SIZE <= cell_control.HEIGHT-2:
+                cell_control.create_cell(pg.mouse.get_pos(), 0)
             elif pg.mouse.get_pressed()[2]:
-                pos = pg.mouse.get_pos()
-                cell_control.delete_cell(pos)
+                cell_control.delete_cell(g.mouse.get_pos())
             prepare.SCREEN.fill((0,0,0))
             cell_control.update(pg.mouse.get_pos())
             pg.display.update()

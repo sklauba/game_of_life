@@ -4,7 +4,7 @@ from . import prepare
 import math
 import os
 
-TILE_SIZE = 10
+TILE_SIZE = 20
 
 class CellController:
     def __init__(self):
@@ -64,59 +64,45 @@ class CellController:
         x = int(location_x)
         y = int(location_y)
         return self.neighbor_check_function((x,y))
-        # for row, col in np.ndindex(self.cells_new.shape):
-        #     alive_neighbors = np.sum(self.cells_new[row-1:row+2, col-1:col+2]) - self.cells_new[row, col] np.
 
-        # print(alive_neighbors)
+    def update_cells(self, each_cell):
+        x = int(each_cell.location[0])
+        y = int(each_cell.location[1])
+        for i in range(9):
+            match i:
+                case 0:
+                    if x != 0 and y < self.HEIGHT-2 and self.neighbor_check(x-1,y+1) == 3:
+                        self.create_cell([x-1,y+1],1)
+                case 1:
+                    if y < self.HEIGHT-2 and self.neighbor_check(x,y+1) == 3:
+                        self.create_cell([x,y+1], 1)
+                case 2:
+                    if x < self.WIDTH-2 and y < self.HEIGHT-2 and self.neighbor_check(x+1,y+1) == 3:
+                        self.create_cell([x+1,y+1], 1)
+                case 3:
+                    if x < self.WIDTH-2 and self.neighbor_check(x+1,y) == 3:
+                        self.create_cell([x+1,y], 1)
+                case 4:
+                    if x < self.WIDTH-2 and y != 0 and self.neighbor_check(x+1,y-1) == 3:
+                        self.create_cell([x+1,y-1], 1)
+                case 5:
+                    if y != 0 and self.neighbor_check(x,y-1) == 3:
+                        self.create_cell([x,y-1], 1)
+                case 6:
+                    if x != 0 and y != 0 and self.neighbor_check(x-1,y-1) == 3:
+                        self.create_cell([x-1,y-1], 1)
+                case 7:
+                    if x != 0 and self.neighbor_check(x-1,y) == 3:
+                        self.create_cell([x-1,y], 1)
+                case 8:
+                    z = self.neighbor_check(x,y)
+                    if z == 2 or z == 3:
+                        self.create_cell([x,y], 1)
 
-    
     def update_state(self):
         for rows in self.cells:
-            for each_cell in rows:
-                if each_cell is not None:
-                    x = int(each_cell.location[0])
-                    y = int(each_cell.location[1])
-                    for i in range(9):
-                        match i:
-                            case 0:
-                                if x != 0 and y < self.HEIGHT-2:
-                                    if self.neighbor_check(x-1,y+1) == 3:
-                                        self.create_cell([x-1,y+1],1)
-                            case 1:
-                                if y < self.HEIGHT-2:
-                                    if self.neighbor_check(x,y+1) == 3:
-                                        self.create_cell([x,y+1], 1)
-                            case 2:
-                                if x < self.WIDTH-2 and y < self.HEIGHT-2:
-                                    if self.neighbor_check(x+1,y+1) == 3:
-                                        self.create_cell([x+1,y+1], 1)
-                            case 3:
-                                if x < self.WIDTH-2:
-                                    if self.neighbor_check(x+1,y) == 3:
-                                        self.create_cell([x+1,y], 1)
-                            case 4:
-                                if x < self.WIDTH-2 and y != 0:
-                                    if self.neighbor_check(x+1,y-1) == 3:
-                                        self.create_cell([x+1,y-1], 1)
-                            case 5:
-                                if y != 0:
-                                    if self.neighbor_check(x,y-1) == 3:
-                                        self.create_cell([x,y-1], 1)
-                            case 6:
-                                if x != 0 and y != 0:
-                                    if self.neighbor_check(x-1,y-1) == 3:
-                                        self.create_cell([x-1,y-1], 1)
-                            case 7:
-                                if x != 0:
-                                    if self.neighbor_check(x-1,y) == 3:
-                                        self.create_cell([x-1,y], 1)
-                            case 8:
-                                z = self.neighbor_check(x,y)
-                                if z == 2 or z == 3:
-                                    self.create_cell([x,y], 1)
-
-
-
+            for cells in rows:
+                if cells is not None: self.update_cells(cells)
         self.cells = np.copy(self.cells_future)
         self.cells_future = np.empty((self.WIDTH,self.HEIGHT), dtype=Cell)
         return self.cells_future
@@ -131,7 +117,7 @@ class CellController:
     def create_cell(self, cell_pos, flag):
         if flag == 0:
             self.cells[cell_pos[0]//TILE_SIZE, cell_pos[1]//TILE_SIZE] = Cell(self.cell_image, ((cell_pos[0]//TILE_SIZE)*TILE_SIZE,(cell_pos[1]//TILE_SIZE)*TILE_SIZE), 0)
-        elif flag == 1:
+        else:
             self.cells_future[(cell_pos[0]), (cell_pos[1])] = Cell(self.cell_image, ((cell_pos[0])*TILE_SIZE,(cell_pos[1])*TILE_SIZE), 0)
     
     def delete_cell(self, cell_pos):
