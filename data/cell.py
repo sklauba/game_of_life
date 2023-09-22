@@ -28,48 +28,47 @@ class CellController:
     def clear_cells(self):
         self.cells = np.empty((self.WIDTH,self.HEIGHT), dtype=Cell)
         self.cells_future=self.cells.copy()
+    
+    def neighbor_check_function(self, pos):
+        neighbors=0
+        for i in range(8):
+            match i:
+                case 0:
+                    if pos[0] != 0 and self.cells[pos[0]-1,pos[1]+1] is not None:
+                        neighbors += 1
+                case 1:
+                    if self.cells[pos[0],pos[1]+1] is not None:
+                        neighbors += 1
+                case 2:
+                    if self.cells[pos[0]+1,pos[1]+1] is not None:
+                        neighbors += 1
+                case 3:
+                    if self.cells[pos[0]+1,pos[1]] is not None:
+                        neighbors += 1
+                case 4:
+                    if pos[1] != 0 and self.cells[pos[0]+1,pos[1]-1] is not None:
+                        neighbors += 1
+                case 5:
+                    if pos[1] != 0 and self.cells[pos[0],pos[1]-1] is not None:
+                        neighbors += 1
+                case 6:
+                    if pos[0] != 0 and pos[1] != 0 and self.cells[pos[0]-1,pos[1]-1] is not None:
+                        neighbors += 1
+                case 7:
+                    if pos[0] != 0 and self.cells[pos[0]-1,pos[1]] is not None:
+                        neighbors += 1
+        return neighbors
 
     def neighbor_check(self, location_x, location_y):
         neighbors = 0
         x = int(location_x)
         y = int(location_y)
-
+        return self.neighbor_check_function((x,y))
         # for row, col in np.ndindex(self.cells_new.shape):
         #     alive_neighbors = np.sum(self.cells_new[row-1:row+2, col-1:col+2]) - self.cells_new[row, col] np.
 
         # print(alive_neighbors)
-        for i in range(8):
-            match i:
-                case 0:
-                    if x != 0:
-                        if self.cells[x-1,y+1] is not None:
-                            neighbors += 1
-                case 1:
-                    if self.cells[x,y+1] is not None:
-                        neighbors += 1
-                case 2:
-                        if self.cells[x+1,y+1] is not None:
-                            neighbors += 1
-                case 3:
-                    if self.cells[x+1,y] is not None:
-                        neighbors += 1
-                case 4:
-                    if y != 0:
-                        if self.cells[x+1,y-1] is not None:
-                            neighbors += 1
-                case 5:
-                    if y != 0:
-                        if self.cells[x,y-1] is not None:
-                            neighbors += 1
-                case 6:
-                    if x != 0 and y != 0:
-                        if self.cells[x-1,y-1] is not None:
-                            neighbors += 1
-                case 7:
-                    if x != 0:
-                        if self.cells[x-1,y] is not None:
-                            neighbors += 1
-        return neighbors
+
     
     def update_state(self):
         for rows in self.cells:
