@@ -8,7 +8,6 @@ TILE_SIZE = 20
 
 class CellController:
     def __init__(self):
-        #self.cells = [ ]
         self.WIDTH = (prepare.WINSIZE[0]//TILE_SIZE)+1
         self.HEIGHT = (prepare.WINSIZE[1]//TILE_SIZE)+1    
         self.cells = np.empty((self.WIDTH,self.HEIGHT), dtype=Cell)
@@ -123,22 +122,7 @@ class CellController:
     def delete_cell(self, cell_pos):
         self.cells[cell_pos[0]//TILE_SIZE, cell_pos[1]//TILE_SIZE] = None
 
-    # def update_test(self, mouse_pos):
-    #     #self.max_i=len(self.cells)
-    #     #self.max_j=len(self.cells[0])
-    #     #for c in self.cells[:]:
-    #     self.cells = self.update_state().copy()
-    #     for _, cell in np.ndenumerate(self.cells):
-    #         if cell != None:
-    #             cell.draw(prepare.SCREEN)
-    #         #print(c)
-    #         self.highlighted_cell.update(0, (round(mouse_pos[0]/TILE_SIZE)*TILE_SIZE,round(mouse_pos[1]/TILE_SIZE)*TILE_SIZE))
-    #         self.highlighted_cell.draw(prepare.SCREEN)
-
     def update(self, mouse_pos):
-        #self.max_i=len(self.cells)
-        #self.max_j=len(self.cells[0])
-        #for c in self.cells[:]:
         for _, cell in np.ndenumerate(self.cells):
             if cell != None:
                 cell.draw(prepare.SCREEN)
